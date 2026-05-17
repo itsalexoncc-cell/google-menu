@@ -37,10 +37,10 @@ const apps = [
   { id: "507874739",  name: "Google Диск",   scheme: "googledrive://"    },
   { id: "680819774",  name: "Google Home",   scheme: "googlehome://",     fallback: "https://play-lh.googleusercontent.com/-UJfyCGXOGNlA_7ys13IRTRxnrA5NGick84oQx-dBTr2swpki2xGIlHPcQaF46H21-u4=w240-h480" },
   { id: "842849113",  name: "Google Sheets", scheme: "googlesheets://"   },
-  { id: "439438619",  name: "Snapseed",      scheme: "snapseed://",       fallback: "https://play-lh.googleusercontent.com/AjGiztl_jbo5jLlL6ohjO03TKy1cC8BE6xZSQvN4L7x_VK05Pagnrj0WRaZWIF9ywQw=w240-h480" },
+  { id: "439438619",  name: "Snapseed",      scheme: "itms-apps://itunes.apple.com/app/id439438619",  fallback: "https://play-lh.googleusercontent.com/AjGiztl_jbo5jLlL6ohjO03TKy1cC8BE6xZSQvN4L7x_VK05Pagnrj0WRaZWIF9ywQw=w240-h480" },
   { id: "422689480",  name: "Gmail",         scheme: "googlegmail://"    },
   { id: "544007664",  name: "YouTube",       scheme: "youtube://"        },
-  { id: "1451784328", name: "Google One",    scheme: "googleone://"      },
+  { id: "1451784328", name: "Google One",    scheme: "itms-apps://itunes.apple.com/app/id1451784328" },
 ];
 
 const ids = apps.map(a => a.id).join(",");
@@ -57,7 +57,7 @@ fetch(`https://itunes.apple.com/lookup?id=${ids}&entity=software`)
     list.innerHTML = apps.map(app => {
       const icon = iconMap[app.id] || app.fallback || "";
       return `
-        <a class="item" href="${app.scheme}">
+        <a class="item" href="${app.scheme}" onclick="window.location.href='${app.scheme}';return false;">
           <img class="icon" src="${icon}" />
           <div class="name">${app.name}</div>
           <div class="arrow">›</div>
