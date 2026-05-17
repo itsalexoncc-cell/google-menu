@@ -1,71 +1,96 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Google Menu</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<title>Google Apps</title>
 
 <style>
 
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
 body{
     margin:0;
-    padding:30px 20px;
-    background:#f2f2f7;
-    font-family:-apple-system;
+    padding:60px 20px;
+    background:#efeff4;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    color:#000;
 }
 
 .title{
     text-align:center;
     font-size:18px;
     font-weight:600;
-    margin-bottom:20px;
-    letter-spacing:2px;
+    letter-spacing:4px;
     color:#8e8e93;
+    margin-bottom:22px;
 }
 
 .card{
-    background:rgba(255,255,255,.75);
-    backdrop-filter:blur(25px);
-    -webkit-backdrop-filter:blur(25px);
-    border-radius:28px;
+    background:rgba(255,255,255,.78);
+    backdrop-filter:blur(30px);
+    -webkit-backdrop-filter:blur(30px);
+    border-radius:32px;
     overflow:hidden;
-    box-shadow:0 10px 30px rgba(0,0,0,.08);
+    box-shadow:
+        0 10px 30px rgba(0,0,0,.06),
+        0 1px 1px rgba(255,255,255,.7) inset;
 }
 
 .item{
     display:flex;
     align-items:center;
-    padding:18px;
     text-decoration:none;
-    color:black;
-    font-size:22px;
-    border-bottom:1px solid rgba(0,0,0,.08);
-    transition:.15s;
-}
-
-.item:active{
-    opacity:.6;
+    color:#000;
+    padding:18px 20px;
+    border-bottom:1px solid rgba(0,0,0,.06);
+    transition:.15s ease;
 }
 
 .item:last-child{
     border-bottom:none;
 }
 
+.item:active{
+    transform:scale(.985);
+    opacity:.65;
+}
+
 .icon{
-    width:42px;
-    height:42px;
+    width:44px;
+    height:44px;
     border-radius:12px;
-    margin-right:16px;
+    margin-right:18px;
+    object-fit:cover;
+    flex-shrink:0;
+}
+
+.name{
+    font-size:21px;
+    font-weight:400;
 }
 
 .arrow{
     margin-left:auto;
-    opacity:.35;
-    font-size:26px;
+    font-size:28px;
+    color:#b3b3b8;
+    font-weight:300;
+}
+
+.footer{
+    margin-top:22px;
+    text-align:center;
+    font-size:13px;
+    color:#8e8e93;
 }
 
 </style>
+
 </head>
 
 <body>
@@ -74,36 +99,64 @@ body{
 
 <div class="card">
 
-<a class="item" href="googlegmail://">
-<img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg">
-Gmail
-<div class="arrow">›</div>
-</a>
-
-<a class="item" href="youtube://">
-<img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg">
-YouTube
-<div class="arrow">›</div>
-</a>
-
-<a class="item" href="googledrive://">
-<img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png">
-Google Drive
+<a class="item" href="familylink://">
+<img class="icon" src="https://cdn-icons-png.flaticon.com/512/888/888857.png">
+<div class="name">Family Link</div>
 <div class="arrow">›</div>
 </a>
 
 <a class="item" href="googlephotos://">
-<img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Google_Photos_icon.svg">
-Google Photos
+<img class="icon" src="https://cdn-icons-png.flaticon.com/512/300/300221.png">
+<div class="name">Google Фото</div>
+<div class="arrow">›</div>
+</a>
+
+<a class="item" href="googledrive://">
+<img class="icon" src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png">
+<div class="name">Google Диск</div>
 <div class="arrow">›</div>
 </a>
 
 <a class="item" href="googlehome://">
-<img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Google_Home_icon.svg">
-Google Home
+<img class="icon" src="https://cdn-icons-png.flaticon.com/512/882/882859.png">
+<div class="name">Google Home</div>
 <div class="arrow">›</div>
 </a>
 
+<a class="item" href="googlesheets://">
+<img class="icon" src="https://cdn-icons-png.flaticon.com/512/2965/2965327.png">
+<div class="name">Google Sheets</div>
+<div class="arrow">›</div>
+</a>
+
+<a class="item" href="snapseed://">
+<img class="icon" src="https://cdn-icons-png.flaticon.com/512/5968/5968520.png">
+<div class="name">Snapseed</div>
+<div class="arrow">›</div>
+</a>
+
+<a class="item" href="googlegmail://">
+<img class="icon" src="https://cdn-icons-png.flaticon.com/512/281/281769.png">
+<div class="name">Gmail</div>
+<div class="arrow">›</div>
+</a>
+
+<a class="item" href="youtube://">
+<img class="icon" src="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
+<div class="name">YouTube</div>
+<div class="arrow">›</div>
+</a>
+
+<a class="item" href="googleone://">
+<img class="icon" src="https://cdn-icons-png.flaticon.com/512/1458/1458279.png">
+<div class="name">Google One</div>
+<div class="arrow">›</div>
+</a>
+
+</div>
+
+<div class="footer">
+iOS Google Launcher
 </div>
 
 </body>
