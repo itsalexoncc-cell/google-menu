@@ -32,9 +32,9 @@ const apps = [
   { id: "1150085200", name: "Family Link",   scheme: "familylink://"     },
   { id: "962194608",  name: "Google Фото",   scheme: "googlephotos://"   },
   { id: "507874739",  name: "Google Диск",   scheme: "googledrive://"    },
-  { id: "295430612",  name: "Google Home",   scheme: "googlehome://"     },
+  { id: "680819774",  name: "Google Home",   scheme: "googlehome://",     fallback: "https://play-lh.googleusercontent.com/-UJfyCGXOGNlA_7ys13IRTRxnrA5NGick84oQx-dBTr2swpki2xGIlHPcQaF46H21-u4=w240-h480" },
   { id: "842849113",  name: "Google Sheets", scheme: "googlesheets://"   },
-  { id: "1148590990", name: "Snapseed",      scheme: "snapseed://"       },
+  { id: "439438619",  name: "Snapseed",      scheme: "snapseed://",       fallback: "https://play-lh.googleusercontent.com/AjGiztl_jbo5jLlL6ohjO03TKy1cC8BE6xZSQvN4L7x_VK05Pagnrj0WRaZWIF9ywQw=w240-h480" },
   { id: "422689480",  name: "Gmail",         scheme: "googlegmail://"    },
   { id: "544007664",  name: "YouTube",       scheme: "youtube://"        },
   { id: "1451784328", name: "Google One",    scheme: "googleone://"      },
@@ -45,7 +45,6 @@ const ids = apps.map(a => a.id).join(",");
 fetch(`https://itunes.apple.com/lookup?id=${ids}&entity=software`)
   .then(r => r.json())
   .then(data => {
-    // Build a map: id => artworkUrl100
     const iconMap = {};
     data.results.forEach(r => {
       iconMap[String(r.trackId)] = r.artworkUrl100;
@@ -53,7 +52,7 @@ fetch(`https://itunes.apple.com/lookup?id=${ids}&entity=software`)
 
     const list = document.getElementById("list");
     list.innerHTML = apps.map(app => {
-      const icon = iconMap[app.id] || "";
+      const icon = iconMap[app.id] || app.fallback || "";
       return `
         <a class="item" href="${app.scheme}">
           <img class="icon" src="${icon}" />
@@ -63,11 +62,10 @@ fetch(`https://itunes.apple.com/lookup?id=${ids}&entity=software`)
     }).join("");
   })
   .catch(() => {
-    // Fallback — show without icons
     const list = document.getElementById("list");
     list.innerHTML = apps.map(app => `
       <a class="item" href="${app.scheme}">
-        <div class="icon"></div>
+        <img class="icon" src="${app.fallback || ''}" />
         <div class="name">${app.name}</div>
         <div class="arrow">›</div>
       </a>`).join("");
