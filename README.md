@@ -7,11 +7,14 @@
 
 ### 📸 Скриншоты
 <!-- МЕСТО ДЛЯ ВАШИХ СКРИНШОТОВ -->
+### 📸 Скриншоты интерфейса
+
 <p align="center">
-  <img src="IMG_7567.png" width="250" alt="Интерфейс папки 1" style="margin: 5px; border-radius: 10px;" />
-  <img src="IMG_7568.png" width="250" alt="Интерфейс папки 2" style="margin: 5px; border-radius: 10px;" />
-  <img src="IMG_7569.png" width="250" alt="Интерфейс папки 3" style="margin: 5px; border-radius: 10px;" />
+  <img src="IMG_7567.png" width="250" alt="Интерфейс папки 1" style="border-radius: 5%; display: inline-block; margin: 5px;" />
+  <img src="IMG_7568.png" width="250" alt="Интерфейс папки 2" style="border-radius: 5%; display: inline-block; margin: 5px;" />
+  <img src="IMG_7569.png" width="250" alt="Интерфейс папки 3" style="border-radius: 5%; display: inline-block; margin: 5px;" />
 </p>
+
 
 ---
 
