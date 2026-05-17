@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Google Menu</title>
+
+<style>
+
+body{
+    margin:0;
+    padding:30px 20px;
+    background:#f2f2f7;
+    font-family:-apple-system;
+}
+
+.title{
+    text-align:center;
+    font-size:18px;
+    font-weight:600;
+    margin-bottom:20px;
+    letter-spacing:2px;
+    color:#8e8e93;
+}
+
+.card{
+    background:rgba(255,255,255,.75);
+    backdrop-filter:blur(25px);
+    -webkit-backdrop-filter:blur(25px);
+    border-radius:28px;
+    overflow:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+}
+
+.item{
+    display:flex;
+    align-items:center;
+    padding:18px;
+    text-decoration:none;
+    color:black;
+    font-size:22px;
+    border-bottom:1px solid rgba(0,0,0,.08);
+    transition:.15s;
+}
+
+.item:active{
+    opacity:.6;
+}
+
+.item:last-child{
+    border-bottom:none;
+}
+
+.icon{
+    width:42px;
+    height:42px;
+    border-radius:12px;
+    margin-right:16px;
+}
+
+.arrow{
+    margin-left:auto;
+    opacity:.35;
+    font-size:26px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="title">GOOGLE APPS</div>
+
+<div class="card">
+
+<a class="item" href="googlegmail://">
+<img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg">
+Gmail
+<div class="arrow">›</div>
+</a>
+
+<a class="item" href="youtube://">
+<img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg">
+YouTube
+<div class="arrow">›</div>
+</a>
+
+<a class="item" href="googledrive://">
+<img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/d/da/Google_Drive_logo.png">
+Google Drive
+<div class="arrow">›</div>
+</a>
+
+<a class="item" href="googlephotos://">
+<img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/c/c9/Google_Photos_icon.svg">
+Google Photos
+<div class="arrow">›</div>
+</a>
+
+<a class="item" href="googlehome://">
+<img class="icon" src="https://upload.wikimedia.org/wikipedia/commons/6/6e/Google_Home_icon.svg">
+Google Home
+<div class="arrow">›</div>
+</a>
+
+</div>
+
+</body>
+</html>
