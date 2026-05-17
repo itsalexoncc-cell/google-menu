@@ -8,8 +8,9 @@
 ### 📸 Скриншоты
 <!-- МЕСТО ДЛЯ ВАШИХ СКРИНШОТОВ -->
 <p align="center">
-  <img src="(https://itsalexoncc-cell.github.io/google-menu/IMG_7567.png)" width="300" alt="Скриншот 1" />
-  <img src="ссылка_на_скриншот_2.png" width="300" alt="Скриншот 2" />
+  <img src="IMG_7567.png" width="250" alt="Интерфейс папки 1" style="margin: 5px; border-radius: 10px;" />
+  <img src="IMG_7568.png" width="250" alt="Интерфейс папки 2" style="margin: 5px; border-radius: 10px;" />
+  <img src="IMG_7569.png" width="250" alt="Интерфейс папки 3" style="margin: 5px; border-radius: 10px;" />
 </p>
 
 ---
