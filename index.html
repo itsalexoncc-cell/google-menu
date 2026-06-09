@@ -18,15 +18,18 @@
 html,body{
     width:100%;
     height:100dvh;
-    overflow:Hidden;
+    overflow:hidden;
     font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+    background:black;
 }
 body{
     display:flex;
     justify-content:center;
     align-items:center;
-    background::transparent;
+    background:transparent;
     position:relative;
+    /* Учитываем safe area снизу */
+    padding-bottom:env(safe-area-inset-bottom);
 }
 /* Размытый фон */
 body::before{
@@ -66,12 +69,10 @@ body::before{
 .folder{
     width:min(95vw,520px);
     border-radius:42px;
-    background:
-        rgba(255,255,255,.08);
+    background:rgba(255,255,255,.08);
     backdrop-filter:blur(12px);
     -webkit-backdrop-filter:blur(12px);
-    border:
-        1px solid rgba(255,255,255,.16);
+    border:1px solid rgba(255,255,255,.16);
     box-shadow:
         0 20px 60px rgba(0,0,0,.25),
         inset 0 1px 0 rgba(255,255,255,.12);
@@ -91,8 +92,7 @@ body::before{
 /* Сетка */
 .grid{
     display:grid;
-    grid-template-columns:
-        repeat(3,1fr);
+    grid-template-columns:repeat(3,1fr);
     gap:26px;
 }
 /* Приложение */
@@ -110,14 +110,12 @@ body::before{
     display:block;
     margin:auto;
     border-radius:18px;
-    box-shadow:
-        0 4px 14px rgba(0,0,0,.18);
+    box-shadow:0 4px 14px rgba(0,0,0,.18);
 }
 .name{
     margin-top:8px;
     font-size:13px;
-    text-shadow:
-        0 1px 4px rgba(0,0,0,.45);
+    text-shadow:0 1px 4px rgba(0,0,0,.45);
     white-space:nowrap;
     overflow:hidden;
     text-overflow:ellipsis;
@@ -126,9 +124,7 @@ body::before{
 </head>
 <body>
 <div class="launcher">
-    <div class="title">
-        Google Apps
-    </div>
+    <div class="title">Google Apps</div>
     <div class="folder">
         <div class="grid" id="appsGrid">
             <div style="color:white;text-align:center;grid-column:1/-1">
@@ -140,81 +136,71 @@ body::before{
 <script>
 const apps = [
 {
-id:"1150085200",
-name:"Family Link",
-scheme:"itms-apps://itunes.apple.com/app/id1150085200"
+    id:"1150085200",
+    name:"Family Link",
+    scheme:"itms-apps://itunes.apple.com/app/id1150085200"
 },
 {
-id:"962194608",
-name:"Фото",
-scheme:"googlephotos://"
+    id:"962194608",
+    name:"Фото",
+    scheme:"googlephotos://"
 },
 {
-id:"507874739",
-name:"Диск",
-scheme:"googledrive://"
+    id:"507874739",
+    name:"Диск",
+    scheme:"googledrive://"
 },
 {
-id:"680819774",
-name:"Home",
-scheme:"googlehome://"
+    id:"680819774",
+    name:"Home",
+    scheme:"googlehome://"
 },
 {
-id:"842849113",
-name:"Sheets",
-scheme:"googlesheets://"
+    id:"842849113",
+    name:"Sheets",
+    scheme:"googlesheets://"
 },
 {
-id:"439438619",
-name:"Snapseed",
-scheme:"itms-apps://itunes.apple.com/app/id439438619"
+    id:"439438619",
+    name:"Snapseed",
+    scheme:"itms-apps://itunes.apple.com/app/id439438619"
 },
 {
-id:"422689480",
-name:"Gmail",
-scheme:"googlegmail://"
+    id:"422689480",
+    name:"Gmail",
+    scheme:"googlegmail://"
 },
 {
-id:"544007664",
-name:"YouTube",
-scheme:"youtube://"
+    id:"544007664",
+    name:"YouTube",
+    scheme:"youtube://"
 },
 {
-id:"1451784328",
-name:"Google One",
-scheme:"itms-apps://itunes.apple.com/app/id1451784328"
+    id:"1451784328",
+    name:"Google One",
+    scheme:"itms-apps://itunes.apple.com/app/id1451784328"
 }
 ];
 const ids = apps.map(a => a.id).join(",");
 fetch(`https://itunes.apple.com/lookup?id=${ids}&entity=software`)
 .then(r => r.json())
 .then(data => {
-const iconMap = {};
-data.results.forEach(app => {
-iconMap[String(app.trackId)] =
-app.artworkUrl512 ||
-app.artworkUrl100;
-});
-const grid =
-document.getElementById("appsGrid");
-grid.innerHTML =
-apps.map(app => {
-const icon =
-iconMap[app.id] || "";
-return `
+    const iconMap = {};
+    data.results.forEach(app => {
+        iconMap[String(app.trackId)] =
+            app.artworkUrl512 || app.artworkUrl100;
+    });
+    const grid = document.getElementById("appsGrid");
+    grid.innerHTML = apps.map(app => {
+        const icon = iconMap[app.id] || "";
+        return `
 <a class="app"
-href="${app.scheme}"
-onclick="window.location.href='${app.scheme}';return false;">
-<img
-class="icon"
-src="${icon}"
-alt="${app.name}">
-<div class="name">
-${app.name}
-</div>
-</a>
-`;
-}).join("");
+   href="${app.scheme}"
+   onclick="window.location.href='${app.scheme}';return false;">
+    <img class="icon" src="${icon}" alt="${app.name}">
+    <div class="name">${app.name}</div>
+</a>`;
+    }).join("");
 });
 </script>
 </body>
