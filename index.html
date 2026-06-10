@@ -19,6 +19,34 @@ body{margin:0;padding:60px 20px;background:#efeff4;font-family:-apple-system,Bli
 .name{font-size:19px;font-weight:400}
 .arrow{margin-left:auto;font-size:26px;color:#c7c7cc;font-weight:300;padding-left:8px}
 .footer{margin-top:22px;text-align:center;font-size:13px;color:#8e8e93}
+  /* Контейнер для свечения */
+.search-bar {
+    position: relative; /* Важно для позиционирования свечения */
+    z-index: 1;
+    overflow: visible; /* Чтобы свечение выходило за границы */
+    /* ... остальные стили сохраняем ... */
+}
+
+/* Сама рамка с градиентом */
+.search-bar::before {
+    content: "";
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    border-radius: 30px; /* чуть больше, чем у .search-bar */
+    padding: 2px;
+    background: linear-gradient(45deg, #4285F4, #EA4335, #FBBC05, #34A853, #4285F4);
+    background-size: 300% 300%;
+    animation: rotateGlow 6s linear infinite;
+    z-index: -1; /* Под саму строку */
+    filter: blur(8px); /* Размытие для эффекта "неонового" свечения */
+    opacity: 0.6;
+}
+
+@keyframes rotateGlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 </style>
 </head>
 <body>
