@@ -6,7 +6,7 @@
 <title>Google</title>
 <link rel="apple-touch-icon" href="icon.jpg">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Google">
 <style>
 *{
@@ -16,48 +16,20 @@
     -webkit-tap-highlight-color:transparent;
 }
 
-html{
-    background-color: #5a5a5a;
-    height: -webkit-fill-available;
+html, body{
+    width:100%;
+    height:100%;
+    min-height:-webkit-fill-available;
+    background:#f1f3f4;
+    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
 body{
-    width:100%;
-    min-height:100vh;
-    min-height:-webkit-fill-available;
-    font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-    background: transparent;
-    overflow:hidden;
-    position:relative;
-    display:flex;
-    flex-direction:column;
-}
-
-/* Фоновый слой */
-#bg{
-    position:fixed;
-    top:0; left:0;
-    width:100%;
-    z-index:0;
-}
-#bg-blur{
-    position:absolute;
-    top:-10%; left:-10%;
-    right:-10%; bottom:-10%;
-    background: url("./folder-bg.PNG") center center / cover no-repeat;
-    filter:blur(14px);
-}
-
-/* Контент */
-.content{
-    position:relative;
-    z-index:1;
     display:flex;
     flex-direction:column;
     align-items:center;
-    flex:1;
     padding-top: calc(env(safe-area-inset-top) + 60px);
-    padding-bottom: 20px;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 20px);
     padding-left: 20px;
     padding-right: 20px;
 }
@@ -66,7 +38,6 @@ body{
 .google-logo{
     display:flex;
     align-items:center;
-    gap:2px;
     margin-bottom:24px;
 }
 .google-logo span{
@@ -89,32 +60,20 @@ body{
     align-items:center;
     padding:14px 20px;
     gap:12px;
-    box-shadow:0 2px 12px rgba(0,0,0,.15);
+    box-shadow:0 2px 8px rgba(0,0,0,.12);
     text-decoration:none;
-    cursor:pointer;
     margin-bottom:32px;
     transition:transform .1s;
 }
-.search-bar:active{
-    transform:scale(.98);
-}
-.search-icon{
-    width:22px;
-    height:22px;
-    flex-shrink:0;
-}
+.search-bar:active{ transform:scale(.98); }
+
 .search-text{
     color:#9aa0a6;
     font-size:16px;
     flex:1;
 }
-.mic-icon{
-    width:22px;
-    height:22px;
-    flex-shrink:0;
-}
 
-/* Сетка приложений */
+/* Сетка */
 .grid{
     width:100%;
     max-width:480px;
@@ -128,38 +87,21 @@ body{
     display:flex;
     justify-content:center;
     align-items:center;
-    aspect-ratio:1;
-    transition:transform .1s;
 }
-.app:active{
-    transform:scale(.90);
-}
-.icon{
-    width:90px;
-    height:90px;
-    display:block;
-    border-radius:26px;
-    box-shadow:0 4px 16px rgba(0,0,0,.22);
-    object-fit:cover;
-}
+.app:active{ transform:scale(.90); }
 
-/* Белая плашка снизу (safe area) */
-.bottom-bar{
-    position:fixed;
-    bottom:0; left:0; right:0;
-    background:white;
-    height:calc(env(safe-area-inset-bottom) + 10px);
-    z-index:10;
+.icon{
+    width:96px;
+    height:96px;
+    display:block;
+    border-radius:28px;
+    box-shadow:0 4px 16px rgba(0,0,0,.15);
+    object-fit:cover;
 }
 </style>
 </head>
 <body>
 
-<div id="bg">
-    <div id="bg-blur"></div>
-</div>
-
-<div class="content">
     <!-- Логотип -->
     <div class="google-logo">
         <span class="g-blue">G</span>
@@ -172,14 +114,12 @@ body{
 
     <!-- Строка поиска -->
     <a class="search-bar" href="x-web-search://" onclick="window.location.href='x-web-search://';return false;">
-        <!-- Search icon -->
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
             <circle cx="11" cy="11" r="7" stroke="#9aa0a6" stroke-width="2.2"/>
             <path d="M16.5 16.5L21 21" stroke="#9aa0a6" stroke-width="2.2" stroke-linecap="round"/>
         </svg>
         <span class="search-text">Поиск в Google</span>
-        <!-- Mic icon -->
-        <svg class="mic-icon" viewBox="0 0 24 24" fill="none">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
             <rect x="9" y="2" width="6" height="12" rx="3" fill="#4285F4"/>
             <path d="M5 11a7 7 0 0014 0" stroke="#34A853" stroke-width="2" stroke-linecap="round" fill="none"/>
             <line x1="12" y1="18" x2="12" y2="22" stroke="#EA4335" stroke-width="2" stroke-linecap="round"/>
@@ -189,20 +129,10 @@ body{
 
     <!-- Приложения -->
     <div class="grid" id="appsGrid">
-        <div style="color:white;text-align:center;grid-column:1/-1">Загрузка...</div>
+        <div style="color:#999;text-align:center;grid-column:1/-1">Загрузка...</div>
     </div>
-</div>
-
-<!-- Белая плашка под home indicator -->
-<div class="bottom-bar"></div>
 
 <script>
-function fixHeight(){
-    document.getElementById('bg').style.height = window.innerHeight + 'px';
-}
-fixHeight();
-window.addEventListener('resize', fixHeight);
-
 const apps = [
     { id:"1150085200", name:"Family Link", scheme:"itms-apps://itunes.apple.com/app/id1150085200" },
     { id:"962194608",  name:"Фото",        scheme:"googlephotos://" },
