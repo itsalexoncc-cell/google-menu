@@ -35,37 +35,55 @@
     .g-blue{color:#4285F4;} .g-red{color:#EA4335;} 
     .g-yellow{color:#FBBC05;} .g-green{color:#34A853;}
 
-    /* Контейнер для свечения */
+        /* ==================== СВЕЧЕНИЕ ==================== */
     .search-wrapper {
         position: relative;
         width: 100%;
         margin-bottom: 48px;
     }
 
-    /* Улучшенное многослойное свечение */
     .search-glow {
         position: absolute;
-        inset: -22px;
+        inset: -18px;
         border-radius: 50px;
         background: linear-gradient(45deg, #4285F4, #EA4335, #FBBC05, #34A853, #4285F4);
         background-size: 400% 400%;
-        animation: rotateGlow 8s linear infinite;
-        filter: blur(16px);
-        opacity: 0.55;
+        animation: rotateGlow 10s linear infinite;
         z-index: 0;
     }
 
-    .search-glow::after {
+    /* Слой 1 — основной */
+    .search-glow {
+        filter: blur(14px);
+        opacity: 0.65;
+    }
+
+    /* Слой 2 — средний */
+    .search-glow::before {
         content: '';
         position: absolute;
-        inset: -12px;
+        inset: -8px;
         border-radius: 50px;
         background: inherit;
         background-size: inherit;
         animation: inherit;
-        filter: blur(28px);
-        opacity: 0.35;
+        filter: blur(24px);
+        opacity: 0.45;
     }
+
+    /* Слой 3 — самый мягкий внешний */
+    .search-glow::after {
+        content: '';
+        position: absolute;
+        inset: -25px;
+        border-radius: 50px;
+        background: inherit;
+        background-size: inherit;
+        animation: inherit;
+        filter: blur(38px);
+        opacity: 0.25;
+    }
+    /* ================================================ */
 
     .search-bar{
         position: relative;
@@ -76,27 +94,22 @@
         align-items:center; 
         padding:14px 20px; 
         gap:12px;
-        box-shadow:0 2px 8px rgba(0,0,0,.12); 
+        box-shadow:0 3px 10px rgba(0,0,0,.13); 
         text-decoration:none;
         z-index: 1;
         transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .search-bar:active{ 
-        transform:scale(0.96); 
-    }
+    .search-bar:active{ transform:scale(0.96); }
 
-    .search-text{
-        color:#9aa0a6; 
-        font-size:16px; 
-        flex:1;
-    }
+    .search-text{color:#9aa0a6; font-size:16px; flex:1;}
 
     @keyframes rotateGlow {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
     }
+
 
     .grid{ width:100%; display:grid; grid-template-columns:repeat(3,1fr); gap: 44px; }
     .app{ text-decoration:none; display:flex; justify-content:center; align-items:center; opacity:0; }
