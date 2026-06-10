@@ -35,36 +35,62 @@
     .g-blue{color:#4285F4;} .g-red{color:#EA4335;} 
     .g-yellow{color:#FBBC05;} .g-green{color:#34A853;}
 
-    /* Контейнер для свечения (обертка) */
+    /* Контейнер для свечения */
     .search-wrapper {
         position: relative;
         width: 100%;
         margin-bottom: 48px;
     }
 
-    /* Само свечение */
+    /* Улучшенное многослойное свечение */
     .search-glow {
         position: absolute;
-        top: -6px; left: -6px; right: -6px; bottom: -6px;
-        border-radius: 34px;
+        inset: -22px;
+        border-radius: 50px;
         background: linear-gradient(45deg, #4285F4, #EA4335, #FBBC05, #34A853, #4285F4);
-        background-size: 300% 300%;
-        animation: rotateGlow 6s linear infinite;
-        filter: blur(14px);
-        opacity: 0.6;
+        background-size: 400% 400%;
+        animation: rotateGlow 8s linear infinite;
+        filter: blur(16px);
+        opacity: 0.55;
         z-index: 0;
+    }
+
+    .search-glow::after {
+        content: '';
+        position: absolute;
+        inset: -12px;
+        border-radius: 50px;
+        background: inherit;
+        background-size: inherit;
+        animation: inherit;
+        filter: blur(28px);
+        opacity: 0.35;
     }
 
     .search-bar{
         position: relative;
-        width: 100%; background:white; border-radius:28px;
-        display:flex; align-items:center; padding:14px 20px; gap:12px;
-        box-shadow:0 2px 8px rgba(0,0,0,.12); text-decoration:none;
+        width: 100%; 
+        background:white; 
+        border-radius:28px;
+        display:flex; 
+        align-items:center; 
+        padding:14px 20px; 
+        gap:12px;
+        box-shadow:0 2px 8px rgba(0,0,0,.12); 
+        text-decoration:none;
         z-index: 1;
         transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .search-bar:active{ transform:scale(0.96); }
-    .search-text{color:#9aa0a6; font-size:16px; flex:1;}
+
+    .search-bar:active{ 
+        transform:scale(0.96); 
+    }
+
+    .search-text{
+        color:#9aa0a6; 
+        font-size:16px; 
+        flex:1;
+    }
 
     @keyframes rotateGlow {
         0% { background-position: 0% 50%; }
