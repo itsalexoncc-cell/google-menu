@@ -142,6 +142,10 @@ const apps = [
     { id:"1451784328", name:"Google One",  scheme:"itms-apps://itunes.apple.com/app/id1451784328" }
 ];
 
+// Очищаем поиск при возврате на страницу
+window.addEventListener('pageshow', () => document.querySelector('input[name="q"]').value = '');
+window.addEventListener('focus', () => document.querySelector('input[name="q"]').value = '');
+
 const ids = apps.map(a => a.id).join(",");
 fetch(`https://itunes.apple.com/lookup?id=${ids}&entity=software`)
 .then(r => r.json())
