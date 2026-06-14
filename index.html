@@ -21,7 +21,6 @@
         padding: calc(env(safe-area-inset-top) + 60px) 44px 20px 44px;
     }
 
-    /* Анимации */
     @keyframes fadeInUp {
         from { opacity: 0; transform: translateY(20px) scale(0.95); }
         to { opacity: 1; transform: translateY(0) scale(1); }
@@ -35,14 +34,13 @@
     .g-blue{color:#4285F4;} .g-red{color:#EA4335;} 
     .g-yellow{color:#FBBC05;} .g-green{color:#34A853;}
 
-    /* ==================== РАЗНОЦВЕТНАЯ ОКАНТОВКА ==================== */
     .search-wrapper {
         position: relative;
         width: 100%;
         margin-bottom: 48px;
     }
 
-    .search-glow {  /* переименовали, но оставили класс для удобства */
+    .search-glow {
         position: absolute;
         inset: -3px;
         border-radius: 31px;
@@ -63,21 +61,35 @@
         align-items:center; 
         padding:14px 20px; 
         gap:12px;
-        box-shadow:0 2px 8px rgba(0,0,0,.12); 
-        text-decoration:none;
+        box-shadow:0 2px 8px rgba(0,0,0,.12);
         z-index: 1;
-        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    .search-bar:active{ transform:scale(0.96); }
+    .search-bar input {
+        flex: 1;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        color: #202124;
+        background: transparent;
+        font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
 
-    .search-text{color:#9aa0a6; font-size:16px; flex:1;}
+    .search-bar input::placeholder { color: #9aa0a6; }
+
+    .search-bar button {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+    }
 
     @keyframes borderRotate {
         0%   { background-position: 0% 50%; }
         100% { background-position: 300% 50%; }
     }
-
 
     .grid{ width:100%; display:grid; grid-template-columns:repeat(3,1fr); gap: 44px; }
     .app{ text-decoration:none; display:flex; justify-content:center; align-items:center; opacity:0; }
@@ -98,11 +110,21 @@
 
     <div class="search-wrapper animate-in" style="animation-delay: 0.1s">
         <div class="search-glow"></div>
-        <a class="search-bar" href="x-web-search://" onclick="window.location.href='x-web-search://';return false;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="#9aa0a6" stroke-width="2.2"/><path d="M16.5 16.5L21 21" stroke="#9aa0a6" stroke-width="2.2" stroke-linecap="round"/></svg>
-            <span class="search-text">Поиск в Google</span>
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="9" y="2" width="6" height="12" rx="3" fill="#4285F4"/><path d="M5 11a7 7 0 0014 0" stroke="#34A853" stroke-width="2" stroke-linecap="round" fill="none"/><line x1="12" y1="18" x2="12" y2="22" stroke="#EA4335" stroke-width="2" stroke-linecap="round"/><line x1="9" y1="22" x2="15" y2="22" stroke="#EA4335" stroke-width="2" stroke-linecap="round"/></svg>
-        </a>
+        <form class="search-bar" action="https://www.google.com/search" method="GET" target="_blank">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                <circle cx="11" cy="11" r="7" stroke="#9aa0a6" stroke-width="2.2"/>
+                <path d="M16.5 16.5L21 21" stroke="#9aa0a6" stroke-width="2.2" stroke-linecap="round"/>
+            </svg>
+            <input type="text" name="q" placeholder="Поиск в Google" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <button type="submit">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                    <rect x="9" y="2" width="6" height="12" rx="3" fill="#4285F4"/>
+                    <path d="M5 11a7 7 0 0014 0" stroke="#34A853" stroke-width="2" stroke-linecap="round" fill="none"/>
+                    <line x1="12" y1="18" x2="12" y2="22" stroke="#EA4335" stroke-width="2" stroke-linecap="round"/>
+                    <line x1="9" y1="22" x2="15" y2="22" stroke="#EA4335" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </form>
     </div>
 
     <div class="grid" id="appsGrid"></div>
@@ -116,7 +138,7 @@ const apps = [
     { id:"842849113",  name:"Sheets",      scheme:"googlesheets://" },
     { id:"439438619",  name:"Snapseed",    scheme:"itms-apps://itunes.apple.com/app/id439438619" },
     { id:"422689480",  name:"Gmail",       scheme:"googlegmail://" },
-    { id:"544007664",  name:"YouTube",       scheme:"youtube://" },
+    { id:"544007664",  name:"YouTube",     scheme:"youtube://" },
     { id:"1451784328", name:"Google One",  scheme:"itms-apps://itunes.apple.com/app/id1451784328" }
 ];
 
