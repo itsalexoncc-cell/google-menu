@@ -19,29 +19,24 @@ body{margin:0;padding:60px 20px;background:#efeff4;font-family:-apple-system,Bli
 .name{font-size:19px;font-weight:400}
 .arrow{margin-left:auto;font-size:26px;color:#c7c7cc;font-weight:300;padding-left:8px}
 .footer{margin-top:22px;text-align:center;font-size:13px;color:#8e8e93}
-  /* Контейнер для свечения */
 .search-bar {
-    position: relative; /* Важно для позиционирования свечения */
+    position: relative;
     z-index: 1;
-    overflow: visible; /* Чтобы свечение выходило за границы */
-    /* ... остальные стили сохраняем ... */
+    overflow: visible;
 }
-
-/* Сама рамка с градиентом */
 .search-bar::before {
     content: "";
     position: absolute;
     top: -2px; left: -2px; right: -2px; bottom: -2px;
-    border-radius: 30px; /* чуть больше, чем у .search-bar */
+    border-radius: 30px;
     padding: 2px;
     background: linear-gradient(45deg, #4285F4, #EA4335, #FBBC05, #34A853, #4285F4);
     background-size: 300% 300%;
     animation: rotateGlow 6s linear infinite;
-    z-index: -1; /* Под саму строку */
-    filter: blur(8px); /* Размытие для эффекта "неонового" свечения */
+    z-index: -1;
+    filter: blur(8px);
     opacity: 0.6;
 }
-
 @keyframes rotateGlow {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -52,13 +47,28 @@ body{margin:0;padding:60px 20px;background:#efeff4;font-family:-apple-system,Bli
 <body>
 
 <div class="title">GOOGLE APPS</div>
+
+<div style="margin-bottom:22px">
+  <form action="https://www.google.com/search" method="get" style="display:flex;gap:10px">
+    <input 
+      name="q" 
+      type="search" 
+      placeholder="Поиск в Google..."
+      style="flex:1;padding:14px 20px;border-radius:22px;border:none;font-size:17px;background:rgba(255,255,255,.78);backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);box-shadow:0 10px 30px rgba(0,0,0,.06);outline:none"
+    />
+    <button 
+      type="submit"
+      style="padding:14px 22px;border-radius:22px;border:none;background:#4285F4;color:#fff;font-size:17px;font-weight:600"
+    >→</button>
+  </form>
+</div>
+
 <div class="card" id="list">
   <div style="padding:20px;text-align:center;color:#8e8e93">Загрузка иконок...</div>
 </div>
 <div class="footer">iOS Google Launcher</div>
 
 <script>
-// App Store ID => { name, scheme }
 const apps = [
   { id: "1150085200", name: "Family Link",   scheme: "itms-apps://itunes.apple.com/app/id1150085200" },
   { id: "962194608",  name: "Google Фото",   scheme: "googlephotos://"   },
