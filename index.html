@@ -6,6 +6,7 @@
 <title>Google Apps</title>
 <link rel="apple-touch-icon" href="https://itsalexoncc-cell.github.io/google-menu/icon.jpg">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Google Apps">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -15,7 +16,7 @@ body{margin:0;padding:60px 20px;background:#efeff4;font-family:-apple-system,Bli
 .item{display:flex;align-items:center;text-decoration:none;color:#000;padding:14px 20px;border-bottom:1px solid rgba(0,0,0,.06)}
 .item:last-child{border-bottom:none}
 .item:active{opacity:.5}
-.icon{width:44px;height:44px;border-radius:12px;margin-right:16px;flex-shrink:0;background:#eee}
+.icon{width:44px;height:44px;border-radius:12px;margin-right:16px;flex-shrink:0;background:#eee;object-fit:cover}
 .name{font-size:19px;font-weight:400}
 .arrow{margin-left:auto;font-size:26px;color:#c7c7cc;font-weight:300;padding-left:8px}
 .footer{margin-top:22px;text-align:center;font-size:13px;color:#8e8e93}
@@ -63,9 +64,7 @@ body{margin:0;padding:60px 20px;background:#efeff4;font-family:-apple-system,Bli
   </form>
 </div>
 
-<div class="card" id="list">
-  <div style="padding:20px;text-align:center;color:#8e8e93">Загрузка иконок...</div>
-</div>
+<div class="card" id="list"></div>
 <div class="footer">iOS Google Launcher</div>
 
 <script>
@@ -81,36 +80,46 @@ const apps = [
   { id: "1451784328", name: "Google One",    scheme: "itms-apps://itunes.apple.com/app/id1451784328" },
 ];
 
-const ids = apps.map(a => a.id).join(",");
+const STORAGE_KEY = 'google_apps_icons_cache';
 
+function render(iconMap = {}) {
+  const list = document.getElementById("list");
+  list.innerHTML = apps.map(app => {
+    const icon = iconMap[app.id] || app.fallback || "";
+    return `
+      <a class="item" href="${app.scheme}" onclick="window.location.href='${app.scheme}';return false;">
+        <img class="icon" src="${icon}" alt="${app.name}" />
+        <div class="name">${app.name}</div>
+        <div class="arrow">›</div>
+      </a>`;
+  }).join("");
+}
+
+// 1. Мгновенный рендер из localStorage
+let cachedIcons = {};
+try {
+  cachedIcons = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+} catch (e) {}
+render(cachedIcons);
+
+// 2. Фоновое обновление с iTunes API
+const ids = apps.map(a => a.id).join(",");
 fetch(`https://itunes.apple.com/lookup?id=${ids}&entity=software`)
   .then(r => r.json())
   .then(data => {
-    const iconMap = {};
+    const freshIcons = {};
     data.results.forEach(r => {
-      iconMap[String(r.trackId)] = r.artworkUrl100;
+      freshIcons[String(r.trackId)] = r.artworkUrl100;
     });
-
-    const list = document.getElementById("list");
-    list.innerHTML = apps.map(app => {
-      const icon = iconMap[app.id] || app.fallback || "";
-      return `
-        <a class="item" href="${app.scheme}" onclick="window.location.href='${app.scheme}';return false;">
-          <img class="icon" src="${icon}" />
-          <div class="name">${app.name}</div>
-          <div class="arrow">›</div>
-        </a>`;
-    }).join("");
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(freshIcons));
+    render(freshIcons);
   })
-  .catch(() => {
-    const list = document.getElementById("list");
-    list.innerHTML = apps.map(app => `
-      <a class="item" href="${app.scheme}">
-        <img class="icon" src="${app.fallback || ''}" />
-        <div class="name">${app.name}</div>
-        <div class="arrow">›</div>
-      </a>`).join("");
-  });
+  .catch(() => {});
+
+// 3. Регистрация Service Worker
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(err => console.error(err));
+}
 </script>
 
 </body>
