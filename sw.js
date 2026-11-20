@@ -1,4 +1,4 @@
-const CACHE_NAME = 'google-apps-shell-v3';
+const CACHE_NAME = 'google-apps-shell-v4';
 const ICON_CACHE = 'google-apps-icons-v2';
 
 const APP_SHELL = [
