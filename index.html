@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Google Apps</title>
-<link rel="apple-touch-icon" href="https://itsalexoncc-cell.github.io/google-menu/icon.jpg">
+<link rel="manifest" href="./manifest.json">
+<link rel="apple-touch-icon" href="./icon.jpg">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Google Apps">
@@ -102,23 +103,27 @@ try {
 } catch (e) {}
 render(cachedIcons);
 
-// 2. Фоновое обновление с iTunes API
-const ids = apps.map(a => a.id).join(",");
-fetch(`https://itunes.apple.com/lookup?id=${ids}&entity=software`)
-  .then(r => r.json())
-  .then(data => {
-    const freshIcons = {};
-    data.results.forEach(r => {
-      freshIcons[String(r.trackId)] = r.artworkUrl100;
-    });
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(freshIcons));
-    render(freshIcons);
-  })
-  .catch(() => {});
+// 2. Фоновое обновление с iTunes API (только если есть сеть)
+if (navigator.onLine) {
+  const ids = apps.map(a => a.id).join(",");
+  fetch(`https://itunes.apple.com/lookup?id=${ids}&entity=software`)
+    .then(r => r.json())
+    .then(data => {
+      const freshIcons = {};
+      data.results.forEach(r => {
+        freshIcons[String(r.trackId)] = r.artworkUrl100;
+      });
+      if (JSON.stringify(freshIcons) !== JSON.stringify(cachedIcons)) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(freshIcons));
+        render(freshIcons);
+      }
+    })
+    .catch(() => {});
+}
 
 // 3. Регистрация Service Worker
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js').catch(err => console.error(err));
+  navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
 }
 </script>
 
