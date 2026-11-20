@@ -20,7 +20,7 @@ body{margin:0;padding:60px 20px;background:#efeff4;font-family:-apple-system,Bli
 .icon{width:44px;height:44px;border-radius:12px;margin-right:16px;flex-shrink:0;background:#eee;object-fit:cover}
 .name{font-size:19px;font-weight:400}
 .arrow{margin-left:auto;font-size:26px;color:#c7c7cc;font-weight:300;padding-left:8px}
-.footer{margin-top:22px;text-align:center;font-size:13px;color:#8e8e93}
+.footer{margin-top:22px;text-align:center;font-size:13px;color:#8e8e93;padding:8px 0;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;cursor:pointer}
 .search-bar {
     position: relative;
     z-index: 1;
@@ -66,9 +66,16 @@ body{margin:0;padding:60px 20px;background:#efeff4;font-family:-apple-system,Bli
 </div>
 
 <div class="card" id="list"></div>
-<div class="footer">iOS Google Launcher</div>
+<div class="footer" id="footer">iOS Google Launcher</div>
 
 <script>
+// Очистка технического параметра ?refresh=... из адреса после принудительного сброса
+if (window.location.search.includes('refresh=')) {
+  try {
+    history.replaceState(null, '', window.location.pathname);
+  } catch (e) {}
+}
+
 const apps = [
   { id: "1150085200", name: "Family Link",   scheme: "comgooglefamilylink://" },
   { id: "962194608",  name: "Google Фото",   scheme: "googlephotos://"   },
@@ -121,10 +128,80 @@ if (navigator.onLine) {
     .catch(() => {});
 }
 
-// 3. Регистрация Service Worker
+// 3. Регистрация Service Worker (updateViaCache: 'none' не даёт iOS кэшировать сам sw.js)
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
+  navigator.serviceWorker
+    .register('./sw.js', { scope: './', updateViaCache: 'none' })
+    .catch(() => {});
 }
+
+// 4. Скрытая кнопка сброса кэша: 5 быстрых нажатий по футеру
+(function setupHiddenReset() {
+  const footer = document.getElementById('footer');
+  const defaultText = footer.textContent;
+  let tapCount = 0;
+  let tapTimer = null;
+  let isResetting = false;
+
+  footer.addEventListener('click', async () => {
+    if (isResetting) return;
+
+    tapCount++;
+    clearTimeout(tapTimer);
+
+    if (tapCount < 5) {
+      tapTimer = setTimeout(() => {
+        tapCount = 0;
+      }, 2000);
+      return;
+    }
+
+    tapCount = 0;
+
+    // Защита от случайного сброса без интернета
+    if (!navigator.onLine) {
+      footer.textContent = 'Нет сети — сброс отменён';
+      setTimeout(() => {
+        footer.textContent = defaultText;
+      }, 2500);
+      return;
+    }
+
+    isResetting = true;
+    footer.textContent = 'Сброс кэша...';
+
+    try {
+      // Удаляем все кэши Service Worker (страницу и иконки)
+      if ('caches' in window) {
+        const keys = await caches.keys();
+        await Promise.all(keys.map(key => caches.delete(key)));
+      }
+
+      // Снимаем регистрацию всех Service Worker
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map(reg => reg.unregister()));
+      }
+
+      // Очищаем кэш ссылок на иконки в localStorage
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {}
+
+      footer.textContent = 'Обновление...';
+
+      // Перезагрузка с обходом HTTP-кэша GitHub Pages
+      const basePath = window.location.pathname;
+      window.location.replace(basePath + '?refresh=' + Date.now());
+    } catch (e) {
+      isResetting = false;
+      footer.textContent = 'Ошибка сброса';
+      setTimeout(() => {
+        footer.textContent = defaultText;
+      }, 2500);
+    }
+  });
+})();
 </script>
 
 </body>
