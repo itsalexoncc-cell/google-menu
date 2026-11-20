@@ -1,5 +1,5 @@
 const CACHE_NAME = 'google-apps-shell-v4';
-const ICON_CACHE = 'google-apps-icons-v2';
+const ASSET_CACHE = 'google-apps-assets-v3';
 
 const APP_SHELL = [
   './',
@@ -32,7 +32,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((keys) =>
       Promise.all(
         keys
-          .filter((key) => key !== CACHE_NAME && key !== ICON_CACHE)
+          .filter((key) => key !== CACHE_NAME && key !== ASSET_CACHE)
           .map((key) => caches.delete(key))
       )
     )
@@ -46,12 +46,12 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(req.url);
 
-  // 1. Не перехватываем поиск в Google и запросы к iTunes API
+  // 1. Не перехватываем поиск Google и запросы к iTunes API
   if (url.hostname.includes('google.com') || url.hostname.includes('itunes.apple.com')) {
     return;
   }
 
-  // 2. Открытие самой страницы (Stale-While-Revalidate с обходом HTTP-кэша GitHub Pages)
+  // 2. Сама страница (Stale-While-Revalidate: мгновенно из кэша, обновление в фоне)
   if (req.mode === 'navigate' && url.origin === self.location.origin) {
     event.respondWith(
       caches.open(CACHE_NAME).then(async (cache) => {
@@ -76,14 +76,17 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 3. Картинки и иконки приложений
+  // 3. Иконки приложений и Google Fonts (Cache-First)
   if (
     req.destination === 'image' ||
+    req.destination === 'font' ||
     url.hostname.includes('mzstatic.com') ||
-    url.hostname.includes('googleusercontent.com')
+    url.hostname.includes('googleusercontent.com') ||
+    url.hostname.includes('fonts.googleapis.com') ||
+    url.hostname.includes('fonts.gstatic.com')
   ) {
     event.respondWith(
-      caches.open(ICON_CACHE).then(async (cache) => {
+      caches.open(ASSET_CACHE).then(async (cache) => {
         const cached = await cache.match(req);
         if (cached) return cached;
 
@@ -101,7 +104,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 4. Остальные локальные файлы
+  // 4. Остальные локальные файлы (manifest.json и др.)
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.open(CACHE_NAME).then(async (cache) => {
