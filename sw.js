@@ -1,5 +1,5 @@
 const CACHE_NAME = 'google-apps-shell-v3';
-const ICON_CACHE = 'google-apps-icons-v3';
+const ICON_CACHE = 'google-apps-icons-v2';
 
 const APP_SHELL = [
   './',
@@ -10,10 +10,17 @@ const APP_SHELL = [
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
-      await cache.addAll(APP_SHELL);
-      // Иконку кэшируем отдельно, чтобы ошибка с ней не сорвала установку SW
+      for (const url of APP_SHELL) {
+        const res = await fetch(url, { cache: 'no-cache' });
+        if (res && res.ok) {
+          await cache.put(url, res);
+        }
+      }
       try {
-        await cache.add('./icon.jpg');
+        const iconRes = await fetch('./icon.jpg', { cache: 'no-cache' });
+        if (iconRes && iconRes.ok) {
+          await cache.put('./icon.jpg', iconRes);
+        }
       } catch (e) {}
     })
   );
@@ -44,7 +51,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 2. Открытие самой страницы (Stale-While-Revalidate: мгновенно из кэша, обновление в фоне)
+  // 2. Открытие самой страницы (Stale-While-Revalidate с обходом HTTP-кэша GitHub Pages)
   if (req.mode === 'navigate' && url.origin === self.location.origin) {
     event.respondWith(
       caches.open(CACHE_NAME).then(async (cache) => {
@@ -53,7 +60,7 @@ self.addEventListener('fetch', (event) => {
           (await cache.match('./')) ||
           (await cache.match(req, { ignoreSearch: true }));
 
-        const networkFetch = fetch(req)
+        const networkFetch = fetch(req, { cache: 'no-cache' })
           .then((res) => {
             if (res && res.ok) {
               cache.put('./index.html', res.clone());
@@ -69,7 +76,7 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 3. Картинки и иконки приложений (включая сторонние домены mzstatic / googleusercontent)
+  // 3. Картинки и иконки приложений
   if (
     req.destination === 'image' ||
     url.hostname.includes('mzstatic.com') ||
@@ -94,13 +101,13 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 4. Остальные локальные файлы (manifest.json и т.д.)
+  // 4. Остальные локальные файлы
   if (url.origin === self.location.origin) {
     event.respondWith(
       caches.open(CACHE_NAME).then(async (cache) => {
         const cached = await cache.match(req, { ignoreSearch: true });
         if (cached) return cached;
-        const res = await fetch(req);
+        const res = await fetch(req, { cache: 'no-cache' });
         if (res && res.ok) cache.put(req, res.clone());
         return res;
       })
